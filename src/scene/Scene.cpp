@@ -114,25 +114,31 @@ void Scene::resetFrameBuffer(const int width, const int height) {
 	_uniqueId = 0;
 
 	// TODO: Set the pixelSize value to be responsive to the screen properties: width and height
-	const int pixelSize = 45;
+	
+	//este codigo calcula el tamaño del pixel en funcion del menor valor de altura y anchura (Height y witdh)
+	int pixelSize = std::min(height, width) / 16;
 
 	// TODO: Place the FrameBuffer in the middle of the screen with the max possible size
-	SDL_Rect frameBufferRect{
-		.x = 400,
-		.y = 50,
-		.w = 600,
-		.h = 600,
-	};
 
+	//esta linea de codigo crea el rectangulo donde tiene que pintarse la cereza
+	SDL_Rect frameBufferRect{
+		.x = (width - pixelSize * 16) / 2,
+		.y = (height - pixelSize * 16) / 2,
+		.w = pixelSize * 16,
+		.h = pixelSize * 16,
+	};
+	//esto divido todo en una liste de 16 por 16
 	for (int i = 0; i < _frameBuffer.size(); ++i) {
 		const SDL_Point pixelCoords{ i % 16 , i / 16 };
 
 		// TODO: Find each pixelPosition from pixel coordinates and framebuffer properties
+		
+		//esto almacena donde esta la posicion real del pixel dentro de la pantalla
 		const SDL_Point pixelPosition{
-			.x = pixelCoords.x * 30,
-			.y = pixelCoords.y * 30,
+			.x = frameBufferRect.x + pixelCoords.x * pixelSize,
+			.y = frameBufferRect.y + pixelCoords.y * pixelSize,
 		};
-
+		//esto lo dibuja
 		const SDL_Rect pixelRect = {
 			.x = pixelPosition.x,
 			.y = pixelPosition.y,
