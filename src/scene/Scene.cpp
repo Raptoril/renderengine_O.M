@@ -126,19 +126,34 @@ void Scene::resetFrameBuffer(const int width, const int height) {
 
 	Log::Debug(std::format("pitch: {}", pitch));
 
-	// TODO: Set the proper frame buffer size
-	const int frameBufferSize = 1200 * 600;
-	for (int i = 0; i < frameBufferSize; ++i) {
-		// TODO: Find the pixel coordinates for each index
-		const SDL_Point pixelCoords{
-			.x = 1200,
-			.y = 1200,
-		};
+	//Marca del 1 al 0 framebuffer y luego indica el numero de divisones que quieres tener de el color
 
-		// TODO: Make a red gradient in the 'x' axis and a green gradient in the 'y' axis
+	float inicial = 1.f;
+	float final = 0.5f;
+	int numero_divisones_x = 10;
+
+	//variables
+	float diferencial = (final - inicial) / numero_divisones_x;
+	//esto hace cosas con el framebuffer, y le indica el tamaño del framebuffer
+	const int frameBufferSize = height * width;
+	for (int i = 0; i < frameBufferSize; ++i) {
+		
+		const SDL_Point pixelCoords{
+			.x = i % width,
+			.y = i / width,
+
+		};
+		
+		int division_x = numero_divisones_x * pixelCoords.x / width;
+
+		//La variable esta creada pues pilla el valor inicial y lo sma al diferencial y lo multiplica por el numero de divisiones, y calcula el porcentaje de color en cada columna.
+
+		float colorPercentage = inicial + diferencial * (float)division_x;
+		int red = (int)(255.f * colorPercentage);
+
 		ImColor color{
-			 255,
-			 255,
+			 red,
+			 0,
 			 0,
 			 255,
 		};
